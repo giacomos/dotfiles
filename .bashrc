@@ -113,6 +113,19 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 export SVN_EDITOR=vim
-export EDITOR="vim"
+#export EDITOR="vim"
 
+alias Update='sudo apt-get update'
+alias Upgrade='sudo apt-get dist-upgrade'
+alias Clean='sudo apt-get autoremove && sudo apt-get autoclean && sudo apt-get clean'
+alias Remove='sudo apt-get purge'
+alias Install='sudo apt-get install'
+alias Restart='sudo shutdown -r now'
+alias Poweroff='sudo shutdown -h now'
+alias Editaliases='gedit ~/.bashrc'
+
+# ryan
+export TERM="screen-256color"
+# ryan
+alias tmux="tmux -2"
 source /home/jack/.nix-profile/etc/profile.d/nix.sh

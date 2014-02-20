@@ -124,8 +124,5 @@ alias Restart='sudo shutdown -r now'
 alias Poweroff='sudo shutdown -h now'
 alias Editaliases='gedit ~/.bashrc'
 
-# ryan
-export TERM="screen-256color"
-# ryan
 alias tmux="tmux -2"
 source /home/jack/.nix-profile/etc/profile.d/nix.sh

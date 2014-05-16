@@ -125,4 +125,8 @@ alias Poweroff='sudo shutdown -h now'
 alias Editaliases='gedit ~/.bashrc'
 
 alias tmux="tmux -2"
-source /home/jack/.nix-profile/etc/profile.d/nix.sh
+#source /home/jack/.nix-profile/etc/profile.d/nix.sh
+
+#this is a workaround to force gnome-terminal to open new tabs in the
+#same location as the previous one
+source /etc/profile.d/vte.sh

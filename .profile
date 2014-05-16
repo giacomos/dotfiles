@@ -21,7 +21,6 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-source /home/jack/.nix-profile/etc/profile.d/nix.sh
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export TERMINAL="gnome-terminal"

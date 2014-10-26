@@ -81,7 +81,7 @@ fi
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
+export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -222,8 +222,8 @@ setopt promptsubst
 local venv='$(virtualenv_info)'
 local cvs='%B%F{green}${vcs_info_msg_0_}%B%F{blue} %{$fg_no_colour%}'
 
-PROMPT="%{$fg_dark_gray%}┌─[%{$purple_user%}@%{$purple_host%}:%{$green_pwd%}]─[%{$orange_time%}]
+PROMPT="%{$fg_dark_gray%}┌─[%{$purple_user%}@%{$purple_host%}:%{$green_pwd%}]─[%{$orange_time%}-[Z]
 %{$fg_dark_gray%}└──> %{$fg_no_colour%}"
-##PROMPT='$(build_prompt)${editor_info[keymap]}'
-#RPROMPT="[%{$fg_no_bold[yellow]%}%?%{$reset_color%}]"
 RPROMPT="${venv}${cvs}"
+#PROMPT='$(build_prompt)${editor_info[keymap]}'
+#RPROMPT="[%{$fg_no_bold[yellow]%}%?%{$reset_color%}]"

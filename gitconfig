@@ -30,3 +30,5 @@
     ls = ls-tree --full-tree -r HEAD
 [include]
 path = .gitconfig.user
+[core]
+	excludesfile = /home/jack/.gitignore

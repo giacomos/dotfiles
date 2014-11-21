@@ -21,7 +21,7 @@ zstyle ':vcs_info:*' enable git svn
 #ZSH_THEME="bira"
 
 # Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -39,7 +39,7 @@ zstyle ':vcs_info:*' enable git svn
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -58,7 +58,24 @@ zstyle ':vcs_info:*' enable git svn
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git pip sudo supervisor wd vagrant)
+
+# Remember about a years worth of history (AWESOME)
+SAVEHIST=10000
+HISTSIZE=10000
+
+# Don't overwrite, append!
+setopt APPEND_HISTORY
+
+# Write after each command
+# setopt INC_APPEND_HISTORY
+
+# Killer: share history between multiple shells
+setopt SHARE_HISTORY
+
+# Save the time and how long a command ran
+setopt EXTENDED_HISTORY
+
+plugins=(git pip sudo supervisor wd vagrant bower)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -107,6 +124,8 @@ alias la="ls -hA $LS_OPTIONS"
 alias l="ls -hCF $LS_OPTIONS"
 alias hs='history | grep '
 alias clean_vim_temp='find . -name "*~" -exec rm {} \;'
+
+alias zsr=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
 
 alias Update='sudo apt-get update'
 alias Upgrade='sudo apt-get dist-upgrade'
@@ -222,8 +241,18 @@ setopt promptsubst
 local venv='$(virtualenv_info)'
 local cvs='%B%F{green}${vcs_info_msg_0_}%B%F{blue} %{$fg_no_colour%}'
 
-PROMPT="%{$fg_dark_gray%}┌─[%{$purple_user%}@%{$purple_host%}:%{$green_pwd%}]─[%{$orange_time%}-[Z]
+PROMPT="%{$fg_dark_gray%}┌─[%{$purple_user%}@%{$purple_host%}:%{$green_pwd%}]─[%{$orange_time%}]-[Z]
 %{$fg_dark_gray%}└──> %{$fg_no_colour%}"
 RPROMPT="${venv}${cvs}"
 #PROMPT='$(build_prompt)${editor_info[keymap]}'
 #RPROMPT="[%{$fg_no_bold[yellow]%}%?%{$reset_color%}]"
+
+# http://stackoverflow.com/a/844299
+expand-or-complete-with-dots() {
+  echo -n "\e[31m...\e[0m"
+  zle expand-or-complete
+  zle redisplay
+}
+zle -N expand-or-complete-with-dots
+bindkey "^I" expand-or-complete-with-dots
+

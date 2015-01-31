@@ -1,63 +1,9 @@
 #
 # WMFS2 configuration file
 #
+@include ~/.config/wmfs/wmfs_rules
+@include ~/.config/wmfs/wmfs_themes
 
-# Possible file inclusion:
-# @include "file"
-
-# Multi theme section
-[themes]
-
-  [theme]
-     # No name mean default
-     # name = "default"
-
-     font = "fixed"
-
-     # Bars
-     bars_width = 20
-     bars_fg = "#AABBAA"
-     bars_bg = "#24364F"
-
-     # Element tags
-     tags_normal_fg = "#AAAAAA"
-     tags_normal_bg = "#24364F"
-     # tags_normal_statusline = ""
-
-     tags_sel_fg    = "#223322"
-     tags_sel_bg    = "#AABBAA"
-     # tags_sel_statusline = ""
-     tags_sel_statusline = "\R[2;2;4;4;#BD0406]"
-
-     tags_occupied_fg = "#AABBAA"
-     tags_occupied_bg = "#445544"
-     tags_occupied_statusline = "\R[0;0;100;1;#AABBAA]"
-
-     tags_urgent_fg    = "#AAAAAA"
-     tags_urgent_bg    = "#880404"
-     # tags_urgent_statusline = ""
-
-     tags_border_color = "#999999"
-     tags_border_width = 1
-
-     # Frame / Client
-     client_normal_fg = "#AAAAAA"
-     client_normal_bg = "#24364F"
-     client_normal_statusline = "\s[3;9;#121212;x] \s[2;8;#ff0000;x](1;client_close)"
-
-     client_sel_fg = "#FFFFFF"
-     client_sel_bg = "#880404"
-     client_sel_statusline = "\s[3;9;#121212;x] \s[2;8;#ff0000;x](1;client_close)"
-
-     # client_free_statusline = ""
-
-     frame_bg = "#555555"
-     client_titlebar_width = 15
-     client_border_width = 1
-
-   [/theme]
-
-[/themes]
 
 [bars]
 
@@ -77,16 +23,23 @@
   [bar]
      position = 0
      screen = 0
-     elements = "tly"   # element order in bar
+     elements = "tlsy"   # element order in bar
      theme = "default"
   [/bar]
+  [bar]
+     position = 0
+     screen = 1
+     elements = "ts"   # element order in bar
+     theme = "secondscreen"
+  [/bar]
 
- [bar]
-    position = 1
-    screen = 0
-    elements = "s"
-    theme = "default"
- [/bar]
+  [bar]
+     name = "bartest"
+     position = 2
+     screen = 0
+     elements = "s"
+     theme = "default"
+  [/bar]
 
 [/bars]
 
@@ -98,35 +51,37 @@
   # Use no screen option or screen = -1 to set tag on each screen
   [tag]
       screen = 0
-      name = "1:  "
-      statusline="^i[15;2;15;15;/home/jack/wmfs/icons/www.png]"
+      name = "1: WWW"
+#      statusline="^i[15;2;15;15;/home/jack/wmfs/icons/www.png]"
   [/tag]
 
   [tag]
+      screen = 0
       name = "2:   " 
       statusline="^i[18;2;15;15;/home/jack/wmfs/icons/term.png]"
   [/tag]
   [tag]
+      screen = 0
       name = "3:   "
       statusline="^i[18;2;15;15;/home/jack/wmfs/icons/mail.png]"
   [/tag]
   [tag]
+      screen = 0
       name = "4:   "
       statusline="^i[18;2;15;15;/home/jack/wmfs/icons/chat.png]"
   [/tag]
   [tag]
+      screen = 0
       name = "5:   "
       statusline="^i[18;2;15;15;/home/jack/wmfs/icons/file.png]"
   [/tag]
-  [tag] name = "6" [/tag]
-  [tag] name = "7" [/tag]
+  [tag] screen = 1  name = "6" [/tag]
+  [tag] screen = 1  name = "7" [/tag]
 
   # Mousebinds associated to Tags element button
   [mouse] button = "1" func = "tag_click" [/mouse]
-  [mouse] button = "4" func = "tag_next"  [/mouse]
-  [mouse] button = "5" func = "tag_prev"  [/mouse]
-
-
+  [mouse] button = "5" func = "tag_next"  [/mouse]
+  [mouse] button = "4" func = "tag_prev"  [/mouse]
 [/tags]
 
 [client]
@@ -167,10 +122,17 @@
      command = "spawn"
      width = 150
   [/launcher]
+  [launcher]
+      name = "launcher_goto"
+      prompt = "goto/open:"
+      command = "spawn roxterm -e ranger"
+      width = 300
+  [/launcher]
 
 [/launchers]
 
 [keys]
+
 
   # Go to tag
   [key] mod = {"Super"} key = "1" func = "tag_set" cmd = "0" [/key]
@@ -230,6 +192,9 @@
   [key] mod = {"Super", "Alt"} key = "Up"  func = "screen_next" [/key]
   # Go to prev screen
   [key] mod = {"Super", "Alt"} key = "Down" func = "screen_prev" [/key]
+  # move client to screen
+  [key] mod = {"Super", "Shift"} key = "Up" func = "screen_move_client_next" [/key]
+  [key] mod = {"Super", "Shift"} key = "Down" func = "screen_move_client_prev" [/key]
   # Layout manipulation
   [key] mod = {"Super"}          key = "m" func = "layout_vmirror" [/key]
   [key] mod = {"Super", "Shift"} key = "m" func = "layout_hmirror" [/key]
@@ -267,6 +232,11 @@
   [key] mod = {""} key = "XF86AudioLowerVolume" func = "spawn" cmd = "amixer -D pulse sset Master '5%-'" [/key]
   [key] mod = {""} key = "XF86AudioMute" func = "spawn" cmd = "amixer -D pulse set Master toggle" [/key]
 
+
+
+  [key] mod = {"Super", "Shift"} key = "e" func = "spawn" cmd = "~/.config/wmfs/dmenu-quit.sh" [/key]
+
+
   # Quit Session
   [key] mod = {"Super", "Alt"} key = "q" func = "quit" [/key]
   # Reload Session
@@ -275,94 +245,38 @@
   [key] mod = {""}               key = "XF86PowerOff"     func = "spawn" cmd = "sudo halt"                            [/key]
   [key] mod = {""}               key = "Help"             func = "spawn" cmd = "sudo reboot"                          [/key]
   [key] mod = {"Super"}          key = "l"                func = "spawn" cmd = "slimlock"                             [/key]
-  [key] mod = {"Super"}          key = "x"                func = "spawn" cmd = "xkill"                                [/key]
-  [key] mod = {"Super"}          key = "c"                func = "client_close"                                       [/key]
-  [key] mod = {"Control", "Alt"} key = "r"                func = "reload"                                             [/key]
-  [key] mod = {""}               key = "XF86HomePage"     func = "quit"                                               [/key]
+#  [key] mod = {"Super"}          key = "x"                func = "spawn" cmd = "xkill"                                [/key]
+#  [key] mod = {"Super"}          key = "c"                func = "client_close"                                       [/key]
+#  [key] mod = {"Control", "Alt"} key = "r"                func = "reload"                                             [/key]
+#  [key] mod = {""}               key = "XF86HomePage"     func = "quit"                                               [/key]
 
+  [key] mod = {"Alt",}                    key = "g" func = "launcher" cmd = "launcher_goto" [/key]
 
 [/keys]
 
 [layouts]
-        fg = "#191919"
-        bg = "#7E89A2"
+    fg = "#191919"
+    bg = "#7E89A2"
 
-        # Border around the layout button.
-        border = true
+    # Border around the layout button.
+    border = true
 
-        # Value menu or switch.
-        system = "menu"
+    # Value menu or switch.
+    system = "menu"
 
-        # Value left or right.
-        placement = "right"
+    # Value left or right.
+    placement = "right"
 
-        # Tiling layouts.
-        [layout] type = "tile_right"        symbol = "RIGHT"    [/layout]
-        [layout] type = "tile_left"         symbol = "LEFT"     [/layout]
-        [layout] type = "tile_top"          symbol = "TOP"      [/layout]
-        [layout] type = "tile_bottom"       symbol = "BOTTOM"   [/layout]
-        [layout] type = "tile_grid"         symbol = "GRID"     [/layout]
-        [layout] type = "mirror_vertical"   symbol = "MIRROR_V" [/layout]
-        [layout] type = "mirror_horizontal" symbol = "MIRROR_H" [/layout]
+    # Tiling layouts.
+    [layout] type = "tile_right"        symbol = "RIGHT"    [/layout]
+    [layout] type = "tile_left"         symbol = "LEFT"     [/layout]
+    [layout] type = "tile_top"          symbol = "TOP"      [/layout]
+    [layout] type = "tile_bottom"       symbol = "BOTTOM"   [/layout]
+    [layout] type = "tile_grid"         symbol = "GRID"     [/layout]
+    [layout] type = "mirror_vertical"   symbol = "MIRROR_V" [/layout]
+    [layout] type = "mirror_horizontal" symbol = "MIRROR_H" [/layout]
 
-        # Other layouts.
-        [layout] type = "max"   symbol = "MAX"  [/layout]
-        [layout] type = "free"  symbol = "FREE" [/layout]
-
+    # Other layouts.
+    [layout] type = "max"   symbol = "MAX"  [/layout]
+    [layout] type = "free"  symbol = "FREE" [/layout]
 [/layouts]
-
-[rules]
-    # Example of rule for MPlayer
-    [rule]
-        instance      = "xv"       # First part of WM_CLASS
-        class         = "MPlayer"  # Seconf part of WM_CLASS, not needed if first part is correct
-        # role        = ""         # WM_WINDOW_ROLE
-        screen        = 0          # Screen to use
-        tag           = 1          # Tag number of apps
-        free          = true       # Set automatic free client
-        max           = false      # Set automatic maximized client
-        follow_client = false      # follow the client
-        ignore_tags   = false      # ignore tag (free mode)
-    [/rule]
-
-    [rule]
-        instance      = "Navigator"
-        class         = "Firefox"
-        screen        = 0
-        tag           = 0
-        follow_client = true
-        ignore_tags   = false
-    [/rule]
-
-    [rule]
-        instance      = "skype"
-        class         = "Skype"
-        screen        = 0
-        tag           = 4
-        follow_client = true
-        ignore_tags   = false
-    [/rule]
-    [rule]
-        instance      = "nautilus"
-        class         = "Nautilus"
-        screen        = 0
-        tag           = 4
-        follow_client = true
-        ignore_tags   = false
-    [/rule]
-    [rule]
-        # use instance = "*" for a all-clients rule
-        instance = "chromium"
-
-        # role   = ""
-        # name   = ""
-        # theme  = "default"
-
-        tag    = 1  # 2nd tag
-        screen = 0
-
-        free       = false
-        tab        = false
-        ignore_tag = false
-    [/rule]
-[/rules]

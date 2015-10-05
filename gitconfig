@@ -24,10 +24,26 @@
     br = branch
     co = checkout
     df = diff
-    lg = log -p
     dc = diff --cached
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
     ls = ls-tree --full-tree -r HEAD
+    m = merge --no-ff
+    st = status
+    ai = add -i
+    ap = add -p
+    d = diff
+    r = remote
+    dc = diff --cached
+    ci = commit -v
+    cia = commit -v -a
+    cp = cherry-pick
+    l = log
+    ll = log -p
+    b = branch
+    reha = reset --hard
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%an - %cr)%Creset' --abbrev-commit --date=relative
+    p = pull
+    f = fetch
 [include]
 path = .gitconfig.user
 [core]

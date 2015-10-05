@@ -24,3 +24,4 @@ fi
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export TERMINAL="/usr/bin/roxterm"
+export EDITOR="/usr/bin/vi"

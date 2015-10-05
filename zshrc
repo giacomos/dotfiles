@@ -75,7 +75,7 @@ setopt SHARE_HISTORY
 # Save the time and how long a command ran
 setopt EXTENDED_HISTORY
 
-plugins=(git pip sudo supervisor wd vagrant bower)
+plugins=(git pip sudo supervisor wd vagrant bower ssh-agent zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -98,7 +98,7 @@ fi
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-export SSH_KEY_PATH="~/.ssh/dsa_id"
+export SSH_KEY_PATH="~/.ssh/id_rsa"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -110,10 +110,15 @@ export SSH_KEY_PATH="~/.ssh/dsa_id"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
-alias grep='grep --color=auto --exclude-dir={.svn,.git} --exclude={*.pyc,*~,*.pyo'
+#alias grep='grep --color=auto --exclude-dir={.svn,.git} --exclude={"*.pyc","*~","*.pyo"}'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-alias grep='grep --color=auto --exclude-dir=".svn"'
+alias docker.io='docker'
+alias g='git'
+# alias sg='find . -maxdepth 1 -type d -exec git --git-dir={}/.git --work-tree=$PWD/{} branch \;'
+function subgit { find . -maxdepth 1 -type d -not -path "." -not -path "./.git/*" -exec printf "${RED}{}${NC}\n" \; -exec git --git-dir={}/.git --work-tree=$PWD/{} $* \; }
 
 # some more ls aliases
 export LS_OPTIONS="--hide=*.pyc --group-directories-first --color=auto"
@@ -235,6 +240,10 @@ precmd() {
     vcs_info ‘prompt’
 }
 
+function greppy { grep -Rni "$1" --include="*.py" --color .; }
+function grepxml { grep -Rni "$1" --include="*.xml" --color .; }
+function grepcode { grep -Rni "$1" --exclude="*.po" --exclude="*.css" --exclude="*.js" --exclude="*.pot" --color .; }
+
 setopt prompt_subst  # we do parameter expansion, command substitution and arithmetic  expansion.  See zshexpn(1).
 setopt promptsubst
 
@@ -255,4 +264,3 @@ expand-or-complete-with-dots() {
 }
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
-

@@ -8,8 +8,8 @@ zstyle ':vcs_info:*' stagedstr '%F{green}●'
 zstyle ':vcs_info:*' unstagedstr '%F{yellow}●'
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{11}%r'
-zstyle ':vcs_info:git*' formats "%{$fg[grey]%}%s %{$reset_color%}%r%{$fg[grey]%} %{$fg[blue]%}%b%{$reset_color%}%m%u%c%{$reset_color%} "
-zstyle ':vcs_info:svn*' formats "%{$fg[grey]%}%s %{$reset_color%}%b%F{1}"
+# zstyle ':vcs_info:git*' formats "%{$fg[grey]%}%s %{$reset_color%}%r%{$fg[grey]%} %{$fg[blue]%}%b%{$reset_color%}%m%u%c%{$reset_color%} "
+# zstyle ':vcs_info:svn*' formats "%{$fg[grey]%}%s %{$reset_color%}%b%F{1}"
 #zstyle ':vcs_info:git*' actionformats "%s  %r/%S %b %m%u%c "
 zstyle ':vcs_info:*' enable git svn
 
@@ -54,11 +54,6 @@ COMPLETION_WAITING_DOTS="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-
 # Remember about a years worth of history (AWESOME)
 SAVEHIST=10000
 HISTSIZE=10000
@@ -70,14 +65,12 @@ setopt APPEND_HISTORY
 # setopt INC_APPEND_HISTORY
 
 # Killer: share history between multiple shells
-setopt SHARE_HISTORY
+# setopt SHARE_HISTORY
 
 # Save the time and how long a command ran
 setopt EXTENDED_HISTORY
 
-plugins=(git pip sudo supervisor wd vagrant bower ssh-agent zsh-syntax-highlighting)
-
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -141,47 +134,6 @@ alias Restart='sudo shutdown -r now'
 alias Poweroff='sudo shutdown -h now'
 alias Editaliases='gedit ~/.bashrc'
 
-CURRENT_BG='NONE'
-SEGMENT_SEPARATOR='⮀'
-
-# Begin a segment
-# Takes two arguments, background and foreground. Both can be omitted,
-# rendering default background/foreground.
-prompt_segment() {
-  local bg fg
-  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
-  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
-  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
-  else
-    echo -n "%{$bg%}%{$fg%} "
-  fi
-  CURRENT_BG=$1
-  [[ -n $3 ]] && print -Pn $3
-
-}
-
-# End the prompt, closing any open segments
-prompt_end() {
-  if [[ -n $CURRENT_BG ]]; then
-    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
-  else
-    echo -n "%{%k%}"
-  fi
-  echo -n "%{%f%}"
-  CURRENT_BG=''
-}
-
-function build_prompt {
-  prompt_segment black default '%(1?;%{%F{red}%}✘ ;)%(!;%{%F{yellow}%}⚡ ;)%(1j;%{%F{cyan}%}%j⚙ ;)%{%F{blue}%}%n%{%F{red}%}@%{%F{green}%}%M'
-  prompt_segment blue black '%2~'
-  if $git_status; then
-    prompt_segment green black '${(e)git_info[prompt]}${git_info[status]}'
-  fi
-  prompt_end
-}
-
-
 fg_green=$'%{\e[0;32m%}'
 fg_blue=$'%{\e[0;34m%}'
 fg_cyan=$'%{\e[0;36m%}'
@@ -207,38 +159,7 @@ rb="%{$fg_light_blue%}]%{$fg_no_colour%}"
 purple_host="%{$fg_purple%}%M%{$fg_dark_gray%}"
 purple_user="%{$fg_purple%}%n%{$fg_dark_gray%}"
 green_pwd="%{$fg_green%}%~%{$fg_dark_gray%}"
-orange_time="%{$fg_brown%}%*%{$fg_dark_gray%}"
-
-export TERM=xterm-256color
-[ -n "$TMUX" ] && export TERM=screen-256color
-
-#function prompt_char {
-#    git branch >/dev/null 2>/dev/null && echo '±' && return
-#    hg root >/dev/null 2>/dev/null && echo '☿' && return
-#    echo '○'
-#}
-#
-
-function virtualenv_info {
-    [ $VIRTUAL_ENV ] && echo '('`basename $VIRTUAL_ENV`') '
-}
-function prompt_char {
-    git branch >/dev/null 2>/dev/null && echo '±' && return
-    hg root >/dev/null 2>/dev/null && echo '☿' && return
-    svn info >/dev/null 2>/dev/null && echo '*' && return
-    echo '○'
-}
-
-precmd() {
-    if [[ -z $(git ls-files --other --exclude-standard 2> /dev/null) ]] {
-        zstyle ':vcs_info:*' formats ' [%b%c%u%B%F{green}]'
-    } else {
-        zstyle ':vcs_info:*' formats ' [%b%c%u%B%F{red}●%F{green}]'
-    }
-
-#    vcs_info
-    vcs_info ‘prompt’
-}
+orange_time="%{$fg_brown%}%*%{$reset_color%}"
 
 function greppy { grep -Rni "$1" --include="*.py" --color .; }
 function grepxml { grep -Rni "$1" --include="*.xml" --color .; }
@@ -246,15 +167,25 @@ function grepcode { grep -Rni "$1" --exclude="*.po" --exclude="*.css" --exclude=
 
 setopt prompt_subst  # we do parameter expansion, command substitution and arithmetic  expansion.  See zshexpn(1).
 setopt promptsubst
+function powerline_precmd() {
+    PS1="$(~/powerline-shell.py $? --shell zsh 2> /dev/null)
+%{$fg[white]%} %{$reset_color%}"
+}
 
-local venv='$(virtualenv_info)'
-local cvs='%B%F{green}${vcs_info_msg_0_}%B%F{blue} %{$fg_no_colour%}'
+function install_powerline_precmd() {
+  for s in "${precmd_functions[@]}"; do
+    if [ "$s" = "powerline_precmd" ]; then
+      return
+    fi
+  done
+  precmd_functions+=(powerline_precmd)
+}
 
-PROMPT="%{$fg_dark_gray%}┌─[%{$purple_user%}@%{$purple_host%}:%{$green_pwd%}]─[%{$orange_time%}]-[Z]
-%{$fg_dark_gray%}└──> %{$fg_no_colour%}"
-RPROMPT="${venv}${cvs}"
-#PROMPT='$(build_prompt)${editor_info[keymap]}'
-#RPROMPT="[%{$fg_no_bold[yellow]%}%?%{$reset_color%}]"
+if [ "$TERM" != "linux" ]; then
+    install_powerline_precmd
+fi
+
+RPROMPT="${orange_time}"
 
 # http://stackoverflow.com/a/844299
 expand-or-complete-with-dots() {
@@ -264,3 +195,31 @@ expand-or-complete-with-dots() {
 }
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
+export PROJECT_HOME="/home/jack/dev/clients"
+source `which virtualenvwrapper.sh`
+
+source ~/antigen/antigen.zsh
+
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+
+antigen bundle git
+antigen bundle pip
+antigen bundle sudo
+antigen bundle supervisor
+antigen bundle wd
+antigen bundle vagrant
+# antigen bundle bower
+antigen bundle ssh-agent
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+# antigen bundle kennethreitz/autoenv
+antigen bundle joshuamorton/autoenv
+
+antigen apply

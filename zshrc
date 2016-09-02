@@ -74,7 +74,7 @@ setopt EXTENDED_HISTORY
 
 # User configuration
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin"
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/opt/node-v5.0.0-linux-x64/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -92,47 +92,6 @@ fi
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/id_rsa"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-#
-
-#alias grep='grep --color=auto --exclude-dir={.svn,.git} --exclude={"*.pyc","*~","*.pyo"}'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias docker.io='docker'
-alias g='git'
-# alias sg='find . -maxdepth 1 -type d -exec git --git-dir={}/.git --work-tree=$PWD/{} branch \;'
-function subgit { find . -maxdepth 1 -type d -not -path "." -not -path "./.git/*" -exec printf "${RED}{}${NC}\n" \; -exec git --git-dir={}/.git --work-tree=$PWD/{} $* \; }
-
-# some more ls aliases
-export LS_OPTIONS="--hide=*.pyc --group-directories-first --color=auto"
-LS_OPTIONS=" --hide='*.pyc' --group-directories-first --color=auto"
-alias ls="ls --color=auto ${LS_OPTIONS}" 
-alias ll="ls -hlF $LS_OPTIONS"
-alias la="ls -hA $LS_OPTIONS"
-alias l="ls -hCF $LS_OPTIONS"
-alias hs='history | grep '
-alias clean_vim_temp='find . -name "*~" -exec rm {} \;'
-
-alias zsr=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-
-alias Update='sudo apt-get update'
-alias Upgrade='sudo apt-get dist-upgrade'
-alias Clean='sudo apt-get autoremove && sudo apt-get autoclean && sudo apt-get clean'
-alias Remove='sudo apt-get purge'
-alias Install='sudo apt-get install'
-alias Restart='sudo shutdown -r now'
-alias Poweroff='sudo shutdown -h now'
-alias Editaliases='gedit ~/.bashrc'
 
 fg_green=$'%{\e[0;32m%}'
 fg_blue=$'%{\e[0;34m%}'
@@ -168,8 +127,8 @@ function grepcode { grep -Rni "$1" --exclude="*.po" --exclude="*.css" --exclude=
 setopt prompt_subst  # we do parameter expansion, command substitution and arithmetic  expansion.  See zshexpn(1).
 setopt promptsubst
 function powerline_precmd() {
-    PS1="$(~/powerline-shell.py $? --shell zsh 2> /dev/null)
-%{$fg[white]%} %{$reset_color%}"
+    PS1="$(~/.powerline-shell.py $? --shell zsh 2> /dev/null)
+%{$fg_dark_gray%} %{$reset_color%}"
 }
 
 function install_powerline_precmd() {
@@ -198,7 +157,7 @@ bindkey "^I" expand-or-complete-with-dots
 export PROJECT_HOME="/home/jack/dev/clients"
 source `which virtualenvwrapper.sh`
 
-source ~/antigen/antigen.zsh
+source ~/.antigen/antigen/antigen.zsh
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
@@ -223,3 +182,47 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle joshuamorton/autoenv
 
 antigen apply
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+#
+
+#alias grep='grep --color=auto --exclude-dir={.svn,.git} --exclude={"*.pyc","*~","*.pyo"}'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias docker.io='docker'
+alias g='git'
+# alias sg='find . -maxdepth 1 -type d -exec git --git-dir={}/.git --work-tree=$PWD/{} branch \;'
+function subgit { find . -maxdepth 1 -type d -not -path "." -not -path "./.git/*" -exec printf "${RED}{}${NC}\n" \; -exec git --git-dir={}/.git --work-tree=$PWD/{} $* \; }
+
+# some more ls aliases
+export LS_OPTIONS="--hide=*.pyc --group-directories-first --color=auto"
+LS_OPTIONS=" --hide='*.pyc' --group-directories-first --color=auto"
+alias ls="ls --color=auto ${LS_OPTIONS}" 
+alias ll="ls -hlF $LS_OPTIONS"
+alias la="ls -hA $LS_OPTIONS"
+alias l="ls -hCF $LS_OPTIONS"
+alias hs='history | grep '
+alias wo='workon'
+alias clean_vim_temp='find . -name "*~" -exec rm {} \;'
+
+alias zsr=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
+
+alias Update='sudo apt-get update'
+alias Upgrade='sudo apt-get dist-upgrade'
+alias Clean='sudo apt-get autoremove && sudo apt-get autoclean && sudo apt-get clean'
+alias Remove='sudo apt-get purge'
+alias Install='sudo apt-get install'
+alias Restart='sudo shutdown -r now'
+alias Poweroff='sudo shutdown -h now'
+alias Editaliases='gedit ~/.bashrc'
+
+export PATH=$PATH:~/.local/bin

@@ -20,8 +20,20 @@ fi
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$PATH:$HOME/.local/bin"
+fi
+if [ -d "$HOME/.dotfiles/bin" ] ; then
+    PATH="$PATH:$HOME/.dotfiles/bin"
+fi
+
+PATH="$PATH:/opt/node-v5.0.0-linux-x64/bin/"
 
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export TERMINAL="/usr/bin/roxterm"
 export EDITOR="/usr/bin/vi"
+
+if [ $XDG_CURRENT_DESKTOP="i3" ]; then
+  export XDG_CURRENT_DESKTOP="GNOME"
+fi

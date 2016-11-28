@@ -44,6 +44,7 @@
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%an - %cr)%Creset' --abbrev-commit --date=relative
     p = pull
     f = fetch
+    sba = "!f() { git subtree add --prefix $2 $1 master; }; f"
 [include]
 path = .gitconfig.user
 [core]

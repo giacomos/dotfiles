@@ -1,5 +1,28 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/opt/node-v5.0.0-linux-x64/bin:~/.local/bin"
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='vim'
+fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+export SSH_KEY_PATH="~/.ssh/id_rsa"
+# virtualenvwrapper
+export PROJECT_HOME="/home/jack/dev/clients"
+# some more ls aliases
+export LS_OPTIONS="--hide=*.pyc --group-directories-first --color=auto"
+
 
 autoload -U colors && colors
 
@@ -74,25 +97,6 @@ setopt EXTENDED_HISTORY
 
 # User configuration
 
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin:/opt/node-v5.0.0-linux-x64/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='vim'
-fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-export SSH_KEY_PATH="~/.ssh/id_rsa"
-
 fg_green=$'%{\e[0;32m%}'
 fg_blue=$'%{\e[0;34m%}'
 fg_cyan=$'%{\e[0;36m%}'
@@ -154,7 +158,6 @@ expand-or-complete-with-dots() {
 }
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
-export PROJECT_HOME="/home/jack/dev/clients"
 source `which virtualenvwrapper.sh`
 
 source ~/.antigen/antigen/antigen.zsh
@@ -177,9 +180,10 @@ antigen bundle vagrant
 # antigen bundle bower
 antigen bundle ssh-agent
 antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle marzocchi/zsh-notify
 
 # antigen bundle kennethreitz/autoenv
-antigen bundle joshuamorton/autoenv
+# antigen bundle joshuamorton/autoenv
 
 antigen apply
 
@@ -203,8 +207,6 @@ alias g='git'
 # alias sg='find . -maxdepth 1 -type d -exec git --git-dir={}/.git --work-tree=$PWD/{} branch \;'
 function subgit { find . -maxdepth 1 -type d -not -path "." -not -path "./.git/*" -exec printf "${RED}{}${NC}\n" \; -exec git --git-dir={}/.git --work-tree=$PWD/{} $* \; }
 
-# some more ls aliases
-export LS_OPTIONS="--hide=*.pyc --group-directories-first --color=auto"
 LS_OPTIONS=" --hide='*.pyc' --group-directories-first --color=auto"
 alias ls="ls --color=auto ${LS_OPTIONS}" 
 alias ll="ls -hlF $LS_OPTIONS"
@@ -224,5 +226,28 @@ alias Install='sudo apt-get install'
 alias Restart='sudo shutdown -r now'
 alias Poweroff='sudo shutdown -h now'
 alias Editaliases='gedit ~/.bashrc'
+alias _docker-compose='docker-compose'
 
-export PATH=$PATH:~/.local/bin
+zstyle ':notify:*' error-title "#fail (exit: $last_status)"
+zstyle ':notify:*' command-complete-timeout 5
+
+ignored_commands=("ll" "ls" "tail" "man" "vi" "vim" "top" "htop")
+# Notify about the last command's success or failure.
+function notify-command-complete() {
+    last_status=$?
+    trimmed_last_command=$(echo $last_command | awk '{print $1}')
+    # echo 'Trimmed: '$trimmed_last_command
+    for x in "${ignored_commands[@]}"; do
+        if [[ $trimmed_last_command = $x ]]; then
+            # echo "Ignoring last command: " $last_command
+            return 0
+        fi
+    done
+    if [[ $last_status -gt "0" ]]; then
+        notify-error <<< $last_command
+    elif [[ -n $start_time ]]; then
+        notify-success "$start_time" "$last_command"
+    fi
+    unset last_command start_time last_status
+}
+add-zsh-hook precmd notify-command-complete

@@ -33,7 +33,7 @@ export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export TERMINAL="/usr/bin/roxterm"
 export EDITOR="/usr/bin/vi"
-
-if [ $XDG_CURRENT_DESKTOP="i3" ]; then
-  export XDG_CURRENT_DESKTOP="GNOME"
-fi
+#
+# if [ $XDG_CURRENT_DESKTOP="i3" ]; then
+#   export XDG_CURRENT_DESKTOP="GNOME"
+# fi
